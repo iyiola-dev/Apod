@@ -1,8 +1,7 @@
-class Apod_models{
-  List <Apod_models> photos = [];
+class ApodModels{
 
-  factory Apod_models.fromJson(Map<dynamic, String> json){
-    return Apod_models(
+  factory ApodModels.fromJson(Map<dynamic, dynamic> json){
+    return ApodModels(
       imageUrl: json['url'],
       explanation: json['explanation'],
       title: json['title'],
@@ -14,6 +13,6 @@ class Apod_models{
   String title;
   String imageUrl;
 
-  Apod_models({this.dateTime, this.explanation, this.imageUrl, this.title});
+  ApodModels({this.dateTime, this.explanation, this.imageUrl, this.title});
 
 }
