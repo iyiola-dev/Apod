@@ -2,6 +2,7 @@
 
 
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proj_nasa/models/Apod.dart';
@@ -18,24 +19,25 @@ class _HomeState extends State<Home> {
   DateTime selectedDate = DateTime.now();
   @override
   void initState() {
-    getpictures();
+    WidgetsBinding.instance.addPostFrameCallback((_)=>getpictures(context));
     super.initState();
   }
 
-  Future<ApodModels> getpictures() async {
+  Future<ApodModels> getpictures(context) async {
     ApodApi apodclass =ApodApi();
-    return await apodclass.getpictures();
+   var selected =  _selectDate(context);
+    return await apodclass.getpictures(selected.toString());
     }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("data"),
+        title: Text("data", style: TextStyle(color: Colors.blue)),
       ),
       body: Center(
         child: FutureBuilder<ApodModels>(
-          future: getpictures(),
+          future: getpictures(context),
           builder: (context, snapshot){
             if(snapshot.hasData){
               return Container(
@@ -47,6 +49,7 @@ class _HomeState extends State<Home> {
                       SizedBox(height: 20.0,),
                       RaisedButton(onPressed: (){
                         _selectDate(context);
+                        
                       },
                       child: Text("Select Date"),
                       )
@@ -75,7 +78,7 @@ class _HomeState extends State<Home> {
           ),
     );
   }
-  Future<Null> _selectDate(BuildContext context) async{
+  Future<DateTime> _selectDate(BuildContext context) async{
     final  DateTime picked = await showDatePicker(
       context: context, 
       initialDate: selectedDate, 
@@ -85,7 +88,12 @@ class _HomeState extends State<Home> {
       if(picked != null && picked != selectedDate){
         setState(() {
           selectedDate = picked;
+          
         });
+        
+          return picked;
+      }else{
+        return DateTime.now();
       }
   }
 }
