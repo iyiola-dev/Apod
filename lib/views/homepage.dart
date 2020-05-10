@@ -1,6 +1,7 @@
 
 
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proj_nasa/models/Apod.dart';
@@ -14,7 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
+  DateTime selectedDate = DateTime.now();
   @override
   void initState() {
     getpictures();
@@ -38,8 +39,19 @@ class _HomeState extends State<Home> {
           builder: (context, snapshot){
             if(snapshot.hasData){
               return Container(
+                padding: const EdgeInsets.symmetric(vertical: 50.0),
                 child: Center(
-                  child: Text("${snapshot.data.title}"),
+                  child: Column(
+                    children: <Widget>[
+                      Text("$selectedDate"),
+                      SizedBox(height: 20.0,),
+                      RaisedButton(onPressed: (){
+                        _selectDate(context);
+                      },
+                      child: Text("Select Date"),
+                      )
+                    ],
+                  ),
                 ),
               );
             }
@@ -62,6 +74,18 @@ class _HomeState extends State<Home> {
           
           ),
     );
-
+  }
+  Future<Null> _selectDate(BuildContext context) async{
+    final  DateTime picked = await showDatePicker(
+      context: context, 
+      initialDate: selectedDate, 
+      firstDate: DateTime(1995, 6, 16), 
+      lastDate: DateTime.now()
+      );
+      if(picked != null && picked != selectedDate){
+        setState(() {
+          selectedDate = picked;
+        });
+      }
   }
 }
