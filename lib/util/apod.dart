@@ -10,7 +10,7 @@ class ApodApi{
   Future<ApodModels> getpictures(String selectedDate) async{
     try{
       var response = await http.get(
-        "https://api.nasa.gov/planetary/apod?api_key=$apiKey&date=$selectedDate"
+        "https://api.nasa.gov/planetary/apod?api_key=$apiKey&date=${selectedDate.substring(0, 10)}"
       );
       var apiod = ApodModels.fromJson(json.decode(response.body));
       if(apiod.imageUrl != "null" ){
